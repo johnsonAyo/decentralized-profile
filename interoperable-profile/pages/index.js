@@ -1,10 +1,21 @@
 import { Web3Provider } from "@ethersproject/providers";
-
+import styles from './../styles/Home.module.css'
 import { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
 import { useViewerConnection } from "@self.id/react";
+import { useViewerRecord } from "@self.id/react";
 
 import { EthereumAuthProvider } from "@self.id/web";
+
+const record = useViewerRecord("basicProfile");
+
+const [name, setName] = useState("");
+
+ const updateRecordName = async (name) => {
+    await record.merge({
+      name: name,
+    });
+  };
 
 export default function Home() {
   const [connection, connect, disconnect] = useViewerConnection();
@@ -74,4 +85,8 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+function RecordSetter() {
+    
 }
