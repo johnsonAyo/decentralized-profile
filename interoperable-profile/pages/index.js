@@ -71,7 +71,10 @@ export default function Home() {
               <span className={styles.maintext}>
                 Connect with your wallet to access your 3ID
               </span>
-              <div className={styles.imgDiv}><img className={styles.img} src="https://cdni.iconscout.com/illustration/free/preview/woman-doing-bitcoin-trading-5008293-4170277.png?w=0&h=1400" /> </div>
+              <image
+                className={styles.img}
+                src="https://cdni.iconscout.com/illustration/free/preview/woman-doing-bitcoin-trading-5008293-4170277.png?w=0&h=1400"
+              />
             </>
           )}
         </div>
