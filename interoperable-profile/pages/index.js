@@ -1,21 +1,11 @@
 import { Web3Provider } from "@ethersproject/providers";
-import styles from './../styles/Home.module.css'
+import styles from "./../styles/Home.module.css";
 import { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
 import { useViewerConnection } from "@self.id/react";
 import { useViewerRecord } from "@self.id/react";
 
 import { EthereumAuthProvider } from "@self.id/web";
-
-const record = useViewerRecord("basicProfile");
-
-const [name, setName] = useState("");
-
- const updateRecordName = async (name) => {
-    await record.merge({
-      name: name,
-    });
-  };
 
 export default function Home() {
   const [connection, connect, disconnect] = useViewerConnection();
@@ -71,7 +61,7 @@ export default function Home() {
         <div className={styles.connection}>
           {connection.status === "connected" ? (
             <div>
-              <span className={styles.subtitle}>
+              <span className={styles.maintext}>
                 Your 3ID is {connection.selfID.id}
               </span>
               <RecordSetter />
@@ -88,5 +78,45 @@ export default function Home() {
 }
 
 function RecordSetter() {
-    
+  const record = useViewerRecord("basicProfile");
+
+  const [name, setName] = useState("");
+
+  const updateRecordName = async (name) => {
+    await record.merge({
+      name: name,
+    });
+  };
+  return (
+    <div className={styles.content}>
+      <div className={styles.nametext}>
+        {record.content ? (
+          <div className={styles.flexCol}>
+            <span className={styles.subtitle}>
+              Hello {record.content.name}!
+            </span>
+
+            <span  className={styles.maintext}>
+              The above name was loaded from Ceramic Network. Try updating it
+              below.
+            </span>
+          </div>
+        ) : (
+          <span className={styles.maintext}>
+            You do not have a profile record attached to your 3ID. Create a
+            basic profile by setting a name below.
+          </span>
+        )}
+      </div>
+
+      <input
+        type="text"
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className={styles.mt2}
+      />
+      <button   className={styles.button} onClick={() => updateRecordName(name)}>Update</button>
+    </div>
+  );
 }
