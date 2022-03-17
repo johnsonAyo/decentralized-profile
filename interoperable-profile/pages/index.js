@@ -6,34 +6,72 @@ import { useViewerConnection } from "@self.id/react";
 
 import { EthereumAuthProvider } from "@self.id/web";
 
-const [connection, connect, disconnect] = useViewerConnection();
+export default function Home() {
+  const [connection, connect, disconnect] = useViewerConnection();
 
-const web3ModalRef = useRef();
+  const web3ModalRef = useRef();
 
-const getProvider = async () => {
-  const provider = await web3ModalRef.current.connect();
-  const wrappedProvider = new Web3Provider(provider);
-  return wrappedProvider;
-};
+  const getProvider = async () => {
+    const provider = await web3ModalRef.current.connect();
+    const wrappedProvider = new Web3Provider(provider);
+    return wrappedProvider;
+  };
 
-useEffect(() => {
-  if (connection.status !== "connected") {
-    web3ModalRef.current = new Web3Modal({
-      network: "rinkeby",
-      providerOptions: {},
-      disableInjectedProvider: false,
-    });
-  }
-}, [connection.status]);
+  useEffect(() => {
+    if (connection.status !== "connected") {
+      web3ModalRef.current = new Web3Modal({
+        network: "rinkeby",
+        providerOptions: {},
+        disableInjectedProvider: false,
+      });
+    }
+  }, [connection.status]);
 
-const connectToSelfID = async () => {
-  const ethereumAuthProvider = await getEthereumAuthProvider();
-  connect(ethereumAuthProvider);
-};
+  const connectToSelfID = async () => {
+    const ethereumAuthProvider = await getEthereumAuthProvider();
+    connect(ethereumAuthProvider);
+  };
 
-const getEthereumAuthProvider = async () => {
-  const wrappedProvider = await getProvider();
-  const signer = wrappedProvider.getSigner();
-  const address = await signer.getAddress();
-  return new EthereumAuthProvider(wrappedProvider.provider, address);
-};
+  const getEthereumAuthProvider = async () => {
+    const wrappedProvider = await getProvider();
+    const signer = wrappedProvider.getSigner();
+    const address = await signer.getAddress();
+    return new EthereumAuthProvider(wrappedProvider.provider, address);
+  };
+
+  return (
+    <div className={styles.main}>
+      <div className={styles.navbar}>
+        <span className={styles.title}>Ceramic Demo</span>
+        {connection.status === "connected" ? (
+          <span className={styles.subtitle}>Connected</span>
+        ) : (
+          <button
+            onClick={connectToSelfID}
+            className={styles.button}
+            disabled={connection.status === "connecting"}
+          >
+            Connect
+          </button>
+        )}
+      </div>
+
+      <div className={styles.content}>
+        <div className={styles.connection}>
+          {connection.status === "connected" ? (
+            <div>
+              <span className={styles.subtitle}>
+                Your 3ID is {connection.selfID.id}
+              </span>
+              <RecordSetter />
+            </div>
+          ) : (
+            <span className={styles.subtitle}>
+              Connect with your wallet to access your 3ID
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
