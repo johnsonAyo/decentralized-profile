@@ -67,9 +67,12 @@ export default function Home() {
               <RecordSetter />
             </div>
           ) : (
-            <span className={styles.subtitle}>
-              Connect with your wallet to access your 3ID
-            </span>
+            <>
+              <span className={styles.maintext}>
+                Connect with your wallet to access your 3ID
+              </span>
+              <div className={styles.imgDiv}><img className={styles.img} src="https://cdni.iconscout.com/illustration/free/preview/woman-doing-bitcoin-trading-5008293-4170277.png?w=0&h=1400" /> </div>
+            </>
           )}
         </div>
       </div>
@@ -96,7 +99,7 @@ function RecordSetter() {
               Hello {record.content.name}!
             </span>
 
-            <span  className={styles.maintext}>
+            <span className={styles.maintext}>
               The above name was loaded from Ceramic Network. Try updating it
               below.
             </span>
@@ -116,7 +119,9 @@ function RecordSetter() {
         onChange={(e) => setName(e.target.value)}
         className={styles.mt2}
       />
-      <button   className={styles.button} onClick={() => updateRecordName(name)}>Update</button>
+      <button className={styles.button} onClick={() => updateRecordName(name)}>
+        Update
+      </button>
     </div>
   );
 }
